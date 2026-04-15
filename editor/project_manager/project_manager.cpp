@@ -1445,7 +1445,7 @@ ProjectManager::ProjectManager() {
 
 		title_bar_logo = memnew(Button);
 		title_bar_logo->set_flat(true);
-		title_bar_logo->set_tooltip_text(TTR("About Godot"));
+		title_bar_logo->set_tooltip_text(TTR("Aether around") ) ;
 		left_hbox->add_child(title_bar_logo);
 		title_bar_logo->connect(SceneStringName(pressed), callable_mp(this, &ProjectManager::_show_about));
 
@@ -1524,33 +1524,41 @@ ProjectManager::ProjectManager() {
 
 		// Project list's top bar.
 		{
-			HBoxContainer *hb = memnew(HBoxContainer);
+						HBoxContainer *hb = memnew(HBoxContainer);
 			hb->set_h_size_flags(Control::SIZE_EXPAND_FILL);
+			hb->add_theme_constant_override("separation", 12 * EDSCALE);
 			local_projects_vb->add_child(hb);
 
 			create_btn = memnew(Button);
 			create_btn->set_text(TTRC("Create"));
-			create_btn->set_shortcut(ED_SHORTCUT("project_manager/new_project", TTRC("New Project"), KeyModifierMask::CMD_OR_CTRL | Key::N));
+			create_btn->set_flat(true);
 			create_btn->connect(SceneStringName(pressed), callable_mp(this, &ProjectManager::_new_project));
 			hb->add_child(create_btn);
 
 			import_btn = memnew(Button);
 			import_btn->set_text(TTRC("Import"));
-			import_btn->set_shortcut(ED_SHORTCUT("project_manager/import_project", TTRC("Import Project"), KeyModifierMask::CMD_OR_CTRL | Key::I));
+			import_btn->set_flat(true);
 			import_btn->connect(SceneStringName(pressed), callable_mp(this, &ProjectManager::_import_project));
 			hb->add_child(import_btn);
 
 			scan_btn = memnew(Button);
 			scan_btn->set_text(TTRC("Scan"));
-			scan_btn->set_shortcut(ED_SHORTCUT("project_manager/scan_projects", TTRC("Scan Projects"), KeyModifierMask::CMD_OR_CTRL | Key::S));
+			scan_btn->set_flat(true);
 			scan_btn->connect(SceneStringName(pressed), callable_mp(this, &ProjectManager::_scan_projects));
 			hb->add_child(scan_btn);
 
-			loading_label = memnew(Label(TTRC("Loading, please wait...")));
-			loading_label->set_accessibility_live(AccessibilityServerEnums::AccessibilityLiveMode::LIVE_ASSERTIVE);
-			loading_label->set_h_size_flags(Control::SIZE_EXPAND_FILL);
-			loading_label->hide();
-			hb->add_child(loading_label);
+			search_box = memnew(LineEdit);
+			search_box->set_placeholder(TTRC("Search Projects..."));
+			search_box->set_clear_button_enabled(true);
+			search_box->set_h_size_flags(Control::SIZE_EXPAND_FILL);
+			
+			Ref<StyleBoxFlat> search_style = memnew(StyleBoxFlat);
+			search_style->set_corner_radius_all(20 * EDSCALE);
+			search_style->set_content_margin_all(8 * EDSCALE);
+			search_style->set_bg_color(Color(0, 0, 0, 0.2));
+			search_box->add_theme_style_override(SceneStringName(normal), search_style);
+			hb->add_child(search_box);
+
 
 			search_box = memnew(LineEdit);
 			search_box->set_placeholder(TTRC("Filter Projects"));
